@@ -24,7 +24,7 @@ a {
 }
 
 .grid {
-  width: 100%;
+  width: calc(100% - 32px);
   max-width: 1200px;
   box-sizing: content-box;
   margin: 0 auto;
