@@ -1,0 +1,45 @@
+@mixin sprite($icon) {
+  background-image: url("/sprite.svg");
+  background-repeat: no-repeat;
+
+  $found: false;
+
+  @if $icon == "back" {
+    $found: true;
+    width: 25px;
+    height: 24px;
+    background-position: 0px 0px;
+  }
+
+  @if $icon == "search" {
+    $found: true;
+    width: 25px;
+    height: 24px;
+    background-position: -135px 0px;
+  }
+
+  @if $icon == "filter" {
+    $found: true;
+    width: 24px;
+    height: 24px;
+    background-position: 0px -44px;
+  }
+
+  @if $icon == "star" {
+    $found: true;
+    width: 24px;
+    height: 24px;
+    background-position: -80px -2px;
+  }
+
+  @if $icon == "star-fill" {
+    $found: true;
+    width: 24px;
+    height: 24px;
+    background-position: -106px -2px;
+  }
+
+  @if $found == false {
+    @error "Icon '#{$icon}' is not valid sprite-landing-light.";
+  }
+}

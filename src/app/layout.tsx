@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat, Creepster } from "next/font/google";
 import "./globals.scss";
 import ApolloProvider from "@/providers/apolloProvider";
+import { FavoritesProvider } from "@/context/favoritesContext";
 
 const MontserratFont = Montserrat({
   variable: "--font-Montserrat",
@@ -27,7 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${MontserratFont.variable} ${CreepsterFont.variable}`}>
-        <ApolloProvider>{children}</ApolloProvider>
+        <FavoritesProvider>
+          <ApolloProvider>{children}</ApolloProvider>
+        </FavoritesProvider>
       </body>
     </html>
   );

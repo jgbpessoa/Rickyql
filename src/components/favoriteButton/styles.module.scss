@@ -1,0 +1,19 @@
+@use "@/styles/sprite" as *;
+
+.button {
+  font-size: 0;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  @include sprite("star");
+  display: none;
+  cursor: pointer;
+}
+
+.button.isFavorite {
+  @include sprite("star-fill");
+}
