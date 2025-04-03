@@ -2,27 +2,32 @@ import Image from "next/image";
 import styles from "./styles.module.scss";
 import Link from "next/link";
 import FavoriteButton from "../favoriteButton";
+import { GetCharactersQuery } from "@/libs/graphql/generated";
+import clsx from "clsx";
 
-type PropsTye = {
-  name?: string;
-  id?: string;
-  species?: string;
-  imgSrc?: string;
+type PropsType = {
+  character: NonNullable<
+    NonNullable<GetCharactersQuery["characters"]>["results"]
+  >[number];
+  isInfoCard?: boolean;
 };
 
-const CharacterCard = ({ id, name, species, imgSrc }: PropsTye) => {
+const CharacterCard = ({ character, isInfoCard }: PropsType) => {
   return (
-    <Link href={`character/${id}`} className={styles.container}>
+    <Link
+      href={`character/${character?.id || ""}`}
+      className={clsx(styles.container, isInfoCard && styles.infoCard)}
+    >
       <Image
-        src={imgSrc || ""}
-        alt={name || ""}
+        src={character?.image || ""}
+        alt={character?.name || ""}
         width={223}
         height={223}
         className={styles.image}
       />
-      <FavoriteButton id={id} />
+      <FavoriteButton id={character?.id || ""} />
       <p className={styles.name}>
-        {name} - {species}
+        {character?.name} - {character?.species}
       </p>
     </Link>
   );

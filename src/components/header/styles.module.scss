@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 409px;
+}
+
+@media screen and (max-width: 768px) {
+  .logo {
+    width: 244px;
+    height: auto;
+  }
+}

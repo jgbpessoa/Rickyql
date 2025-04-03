@@ -1,0 +1,9 @@
+.section {
+  margin-top: 85px;
+}
+
+@media screen and (max-width: 768px) {
+  .section {
+    margin-top: 42px;
+  }
+}

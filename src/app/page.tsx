@@ -1,5 +1,5 @@
 import { query } from "@/libs/apollo/apollo-client";
-import styles from "./page.module.scss";
+
 import {
   GetCharactersDocument,
   GetCharactersQuery,
@@ -21,10 +21,8 @@ export default async function Home() {
   const characters = data?.characters?.results;
 
   return (
-    <div className="grid">
-      <h1 className={styles.title}>Ricky and Morty</h1>
-      <p className={styles.description}>Teste da font Creepster</p>
+    <main className="grid">
       <CharactersGrid characters={characters} />
-    </div>
+    </main>
   );
 }

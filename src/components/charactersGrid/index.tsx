@@ -8,17 +8,15 @@ type PropTypes = {
 
 const CharactersGrid = ({ characters }: PropTypes) => {
   return (
-    <div className={styles.grid}>
-      {characters?.map((character) => (
-        <CharacterCard
-          id={character?.id || ""}
-          imgSrc={character?.image || ""}
-          name={character?.name || ""}
-          species={character?.species || ""}
-          key={character?.id}
-        />
-      ))}
-    </div>
+    <section>
+      <ul className={styles.grid}>
+        {characters?.map((character) => (
+          <li className={styles.listItem} key={character?.id}>
+            <CharacterCard character={character} />
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 };
 
