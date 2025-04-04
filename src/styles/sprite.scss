@@ -15,14 +15,14 @@
     $found: true;
     width: 25px;
     height: 24px;
-    background-position: -135px 0px;
+    background-position: -27px -2px;
   }
 
   @if $icon == "filter" {
     $found: true;
     width: 24px;
     height: 24px;
-    background-position: 0px -44px;
+    background-position: -54px -2px;
   }
 
   @if $icon == "star" {

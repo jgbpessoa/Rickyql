@@ -7,12 +7,23 @@ import {
 } from "@/libs/graphql/generated";
 
 import CharactersGrid from "@/components/charactersGrid";
+import FilterDropdown from "@/components/filterDropdown";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { filter: string };
+}) {
+  const { filter } = await searchParams;
+  const filterValue = filter || "";
+
   const { data } = await query<GetCharactersQuery, GetCharactersQueryVariables>(
     {
       query: GetCharactersDocument,
       variables: {
+        filter: {
+          species: filterValue,
+        },
         page: 1,
       },
     }
@@ -22,7 +33,8 @@ export default async function Home() {
 
   return (
     <main className="grid">
-      <CharactersGrid characters={characters} />
+      <FilterDropdown />
+      <CharactersGrid characters={characters} filter={filterValue} />
     </main>
   );
 }

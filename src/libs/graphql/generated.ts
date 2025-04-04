@@ -213,11 +213,19 @@ export type GetCharacterQueryVariables = Exact<{
 export type GetCharacterQuery = { __typename?: 'Query', character?: { __typename?: 'Character', created?: string | null, species?: string | null, gender?: string | null, id?: string | null, name?: string | null, image?: string | null } | null };
 
 export type GetCharactersQueryVariables = Exact<{
+  filter?: InputMaybe<FilterCharacter>;
   page: Scalars['Int']['input'];
 }>;
 
 
 export type GetCharactersQuery = { __typename?: 'Query', characters?: { __typename?: 'Characters', results?: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, image?: string | null, species?: string | null } | null> | null } | null };
+
+export type GetCharactersByIdQueryVariables = Exact<{
+  ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+
+export type GetCharactersByIdQuery = { __typename?: 'Query', charactersByIds?: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, image?: string | null, species?: string | null } | null> | null };
 
 export const CharacterFieldsFragmentDoc = gql`
     fragment CharacterFields on Character {
@@ -271,8 +279,8 @@ export type GetCharacterLazyQueryHookResult = ReturnType<typeof useGetCharacterL
 export type GetCharacterSuspenseQueryHookResult = ReturnType<typeof useGetCharacterSuspenseQuery>;
 export type GetCharacterQueryResult = Apollo.QueryResult<GetCharacterQuery, GetCharacterQueryVariables>;
 export const GetCharactersDocument = gql`
-    query getCharacters($page: Int!) {
-  characters(page: $page) {
+    query getCharacters($filter: FilterCharacter, $page: Int!) {
+  characters(filter: $filter, page: $page) {
     results {
       ...CharacterFields
     }
@@ -292,6 +300,7 @@ export const GetCharactersDocument = gql`
  * @example
  * const { data, loading, error } = useGetCharactersQuery({
  *   variables: {
+ *      filter: // value for 'filter'
  *      page: // value for 'page'
  *   },
  * });
@@ -312,3 +321,43 @@ export type GetCharactersQueryHookResult = ReturnType<typeof useGetCharactersQue
 export type GetCharactersLazyQueryHookResult = ReturnType<typeof useGetCharactersLazyQuery>;
 export type GetCharactersSuspenseQueryHookResult = ReturnType<typeof useGetCharactersSuspenseQuery>;
 export type GetCharactersQueryResult = Apollo.QueryResult<GetCharactersQuery, GetCharactersQueryVariables>;
+export const GetCharactersByIdDocument = gql`
+    query getCharactersById($ids: [ID!]!) {
+  charactersByIds(ids: $ids) {
+    ...CharacterFields
+  }
+}
+    ${CharacterFieldsFragmentDoc}`;
+
+/**
+ * __useGetCharactersByIdQuery__
+ *
+ * To run a query within a React component, call `useGetCharactersByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCharactersByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCharactersByIdQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useGetCharactersByIdQuery(baseOptions: Apollo.QueryHookOptions<GetCharactersByIdQuery, GetCharactersByIdQueryVariables> & ({ variables: GetCharactersByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCharactersByIdQuery, GetCharactersByIdQueryVariables>(GetCharactersByIdDocument, options);
+      }
+export function useGetCharactersByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCharactersByIdQuery, GetCharactersByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCharactersByIdQuery, GetCharactersByIdQueryVariables>(GetCharactersByIdDocument, options);
+        }
+export function useGetCharactersByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCharactersByIdQuery, GetCharactersByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCharactersByIdQuery, GetCharactersByIdQueryVariables>(GetCharactersByIdDocument, options);
+        }
+export type GetCharactersByIdQueryHookResult = ReturnType<typeof useGetCharactersByIdQuery>;
+export type GetCharactersByIdLazyQueryHookResult = ReturnType<typeof useGetCharactersByIdLazyQuery>;
+export type GetCharactersByIdSuspenseQueryHookResult = ReturnType<typeof useGetCharactersByIdSuspenseQuery>;
+export type GetCharactersByIdQueryResult = Apollo.QueryResult<GetCharactersByIdQuery, GetCharactersByIdQueryVariables>;
