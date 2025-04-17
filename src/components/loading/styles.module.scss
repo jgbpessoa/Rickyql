@@ -17,3 +17,9 @@
   align-items: center;
   justify-content: center;
 }
+
+@media (max-width: 768px) {
+  .loading {
+    font-size: 13px;
+  }
+}

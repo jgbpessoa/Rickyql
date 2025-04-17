@@ -34,9 +34,10 @@
 
 .image {
   width: 100%;
-  height: auto;
+  height: 100%;
   position: absolute;
   z-index: -1;
+  object-fit: cover;
 }
 
 .name {
@@ -68,5 +69,12 @@
 @media (hover: none) {
   .container {
     @include hover-effect;
+  }
+}
+
+@media (max-width: 768px) {
+  .container.infoCard {
+    flex-basis: calc(100vh - 170px);
+    max-height: 650px;
   }
 }

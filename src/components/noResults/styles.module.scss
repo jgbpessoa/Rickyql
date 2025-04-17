@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-family: var(--font-Creepster);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1.37;
+  text-align: center;
+  color: #22a2bd;
+
+  span {
+    color: #8bbc60;
+  }
+}
+
+.image {
+  margin-top: 114px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: calc(100vh - 220px);
+  }
+
+  .image {
+    margin-top: 63px;
+    width: 100%;
+    height: auto;
+  }
+}

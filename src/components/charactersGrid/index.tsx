@@ -14,19 +14,30 @@ import PlaceholderCard from "../placeholderCard";
 import Loading from "../loading";
 import styles from "./styles.module.scss";
 import { useFavorites } from "@/context/favoritesContext";
+import NoResults from "../noResults";
 
 type PropTypes = {
   initialCharacters: NonNullable<GetCharactersQuery["characters"]>["results"];
   filter: string;
+  search: string;
+  hasMoreThanInitial: number | null;
 };
 
-const CharactersGrid = ({ initialCharacters, filter }: PropTypes) => {
+const CharactersGrid = ({
+  initialCharacters,
+  filter,
+  search,
+  hasMoreThanInitial,
+}: PropTypes) => {
   const { favoriteIds } = useFavorites();
 
   const [characters, setCharacters] = useState(initialCharacters || []);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
+
+  const hasMounted = useRef(false);
 
   const [favoriteCharacters, setFavoriteCharacters] = useState<
     GetCharactersByIdQuery["charactersByIds"]
@@ -51,6 +62,37 @@ const CharactersGrid = ({ initialCharacters, filter }: PropTypes) => {
     }
   }, [favoritesData]);
 
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
+
+    setPage(1);
+    setHasMore(true);
+    setIsLoadingMore(false);
+
+    if (filter === "favorites") return;
+
+    setIsRefetching(true);
+
+    loadCharacters({
+      variables: { page: 1, filter: { species: filter, name: search } },
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        const results = data.characters?.results || [];
+        const hasNext = data.characters?.info?.next;
+
+        setCharacters(results);
+        setHasMore(!!hasNext);
+        setIsRefetching(false);
+      },
+      onError: () => {
+        setIsRefetching(false);
+      },
+    });
+  }, [loadCharacters, filter, search]);
+
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const loadMore = useCallback(() => {
@@ -58,7 +100,7 @@ const CharactersGrid = ({ initialCharacters, filter }: PropTypes) => {
 
     setIsLoadingMore(true);
     loadCharacters({
-      variables: { page: page + 1, filter: { species: filter } },
+      variables: { page: page + 1, filter: { species: filter, name: search } },
       onCompleted: (data) => {
         const newResults = data.characters?.results || [];
         const endReached = !data.characters?.info?.next;
@@ -72,10 +114,11 @@ const CharactersGrid = ({ initialCharacters, filter }: PropTypes) => {
         setIsLoadingMore(false);
       },
     });
-  }, [loadCharacters, filter, page, hasMore, isLoadingMore]);
+  }, [loadCharacters, filter, search, page, hasMore, isLoadingMore]);
 
   useEffect(() => {
-    if (!observerRef.current || filter === "favorites") return;
+    if (!observerRef.current || filter === "favorites" || !hasMoreThanInitial)
+      return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -90,20 +133,20 @@ const CharactersGrid = ({ initialCharacters, filter }: PropTypes) => {
     return () => {
       if (target) observer.unobserve(target);
     };
-  }, [loadMore, filter]);
+  }, [loadMore, filter, hasMoreThanInitial]);
 
   const displayedCharacters =
     filter === "favorites" ? favoriteCharacters : characters;
 
   return (
     <section>
-      {loadingFavorites && <Loading />}
+      {(loadingFavorites || isRefetching) && <Loading />}
       {errorFavorites && (
         <p>Error loading favorites: {errorFavorites.message}</p>
       )}
 
       <ul className={styles.grid}>
-        {loadingFavorites
+        {loadingFavorites || isRefetching
           ? Array.from({ length: 20 }).map((_, index) => (
               <li className={styles.listItem} key={`placeholder-${index}`}>
                 <PlaceholderCard />
@@ -123,6 +166,10 @@ const CharactersGrid = ({ initialCharacters, filter }: PropTypes) => {
             </li>
           ))}
       </ul>
+
+      {!displayedCharacters?.length && !isRefetching && !loadingFavorites && (
+        <NoResults search={search} />
+      )}
 
       {filter !== "favorites" && (
         <div ref={observerRef} style={{ height: 1 }} />

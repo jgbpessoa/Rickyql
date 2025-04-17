@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import styles from "./styles.module.scss";
 import clsx from "clsx";
 
@@ -14,6 +15,7 @@ const filterOptions = [
 const FilterDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -47,19 +49,27 @@ const FilterDropdown = () => {
         <i className={styles.icon} /> Filter
       </button>
       <ul className={clsx(styles.dropdown, isOpen && styles.isOpen)}>
-        {filterOptions.map((option) => (
-          <li key={option.value}>
-            <Link
-              href={{
-                pathname: "/",
-                query: { filter: option.value },
-              }}
-              className={styles.option}
-            >
-              {option.label}
-            </Link>
-          </li>
-        ))}
+        {filterOptions.map((option) => {
+          const params = new URLSearchParams(searchParams.toString());
+          const isFavorite = option.value === "favorites";
+          params.set("filter", option.value);
+
+          return (
+            <li key={option.value}>
+              <Link
+                href={{
+                  pathname: "/",
+                  query: isFavorite
+                    ? { filter: "favorites" }
+                    : Object.fromEntries(params),
+                }}
+                className={styles.option}
+              >
+                {option.label}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

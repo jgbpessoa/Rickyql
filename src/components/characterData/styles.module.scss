@@ -13,3 +13,17 @@
   flex-direction: column;
   align-items: center;
 }
+
+@media (max-width: 768px) {
+  .container {
+    position: absolute;
+    background: none;
+    bottom: 0;
+    aspect-ratio: unset;
+    padding: 0 0 16px 16px;
+  }
+
+  .data {
+    align-items: flex-start;
+  }
+}
