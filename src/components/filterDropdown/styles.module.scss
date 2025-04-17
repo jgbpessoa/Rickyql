@@ -1,10 +1,13 @@
 @use "@/styles/sprite" as *;
 
 .container {
-  position: relative;
+  position: absolute;
   display: flex;
   justify-content: flex-end;
   z-index: 3;
+  right: 4px;
+  top: 8px;
+  transform: translateX(-50%);
 }
 
 .button {
@@ -17,6 +20,7 @@
   display: block;
   width: 24px;
   height: 24px;
+  cursor: pointer;
   @include sprite("filter");
 }
 

@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loading {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-Creepster);
+  font-size: 36px;
+  line-height: 1.37;
+  color: #22a2bd;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

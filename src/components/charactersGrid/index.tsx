@@ -10,6 +10,8 @@ import {
 import CharacterCard from "../characterCard";
 import styles from "./styles.module.scss";
 import { useFavorites } from "@/context/favoritesContext";
+import Loading from "../loading";
+import PlaceholderCard from "../placeholderCard";
 
 type PropTypes = {
   characters: NonNullable<GetCharactersQuery["characters"]>["results"];
@@ -41,14 +43,18 @@ const CharactersGrid = ({ characters, filter }: PropTypes) => {
 
   return (
     <section>
-      {loading && <p>Loading favorites...</p>}
+      {loading && <Loading />}
       {error && <p>Error loading favorites: {error.message}</p>}
       <ul className={styles.grid}>
-        {displayedCharacters?.map((character) => (
-          <li className={styles.listItem} key={character?.id}>
-            <CharacterCard character={character} />
-          </li>
-        ))}
+        {loading
+          ? Array.from({ length: 10 }).map((_, index) => (
+              <PlaceholderCard key={index} />
+            ))
+          : displayedCharacters?.map((character) => (
+              <li className={styles.listItem} key={character?.id}>
+                <CharacterCard character={character} />
+              </li>
+            ))}
       </ul>
     </section>
   );
