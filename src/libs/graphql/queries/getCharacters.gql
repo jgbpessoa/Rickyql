@@ -5,5 +5,8 @@ query getCharacters($filter: FilterCharacter, $page: Int!) {
     results {
       ...CharacterFields
     }
+    info {
+      next
+    }
   }
 }

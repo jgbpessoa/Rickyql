@@ -218,7 +218,7 @@ export type GetCharactersQueryVariables = Exact<{
 }>;
 
 
-export type GetCharactersQuery = { __typename?: 'Query', characters?: { __typename?: 'Characters', results?: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, image?: string | null, species?: string | null } | null> | null } | null };
+export type GetCharactersQuery = { __typename?: 'Query', characters?: { __typename?: 'Characters', results?: Array<{ __typename?: 'Character', id?: string | null, name?: string | null, image?: string | null, species?: string | null } | null> | null, info?: { __typename?: 'Info', next?: number | null } | null } | null };
 
 export type GetCharactersByIdQueryVariables = Exact<{
   ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
@@ -283,6 +283,9 @@ export const GetCharactersDocument = gql`
   characters(filter: $filter, page: $page) {
     results {
       ...CharacterFields
+    }
+    info {
+      next
     }
   }
 }

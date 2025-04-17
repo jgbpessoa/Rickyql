@@ -34,7 +34,11 @@ export default async function Home({
   return (
     <main className="grid">
       <FilterDropdown />
-      <CharactersGrid characters={characters} filter={filterValue} />
+      <CharactersGrid
+        key={filterValue}
+        initialCharacters={characters}
+        filter={filterValue}
+      />
     </main>
   );
 }
